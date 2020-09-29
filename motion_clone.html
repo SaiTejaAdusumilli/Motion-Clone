@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Motion Clone</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-attachment: fixed;
+        background-image: url("https://i.pinimg.com/originals/fa/33/2c/fa332c06f406adf9f4b59a3c82289958.jpg");
+      }
+      .container {
+        margin: 30px;
+      }
+      .header {
+        text-align: center;
+      }
+      .file-container {
+        margin: 30px;
+        display: flex;
+      }
+      .inp-field {
+        position: relative;
+        top: 0;
+        left: 20%;
+      }
+      .sub-btn {
+        position: relative;
+        top: 0;
+        left: 45%;
+      }
+      .img-container {
+        border: 1px solid black;
+        width: 400px;
+        height: 250px;
+        object-fit: fill;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+      .multi-img-container {
+        margin: 30px;
+        display: flex;
+      }
+      .multi-img {
+        margin: 10px;
+        flex: 50%;
+        justify-content: center;
+      }
+      .img1 {
+        width: 700px;
+        height: 200px;
+        object-fit: fill;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header"><h1>Motion Clone</h1></div>
+      <div class="file-container">
+        <div class="inp-field">
+          <input type="file" id="myfile" />
+        </div>
+        <div class="sub-btn"><input onclick="updateImg()" type="submit" /></div>
+      </div>
+      <div>
+        <img class="img-container" id="main-img" src="" alt="Image" />
+      </div>
+      <div class="multi-img-container">
+        <div class="multi-img">
+          <img
+            class="img1"
+            src="https://neurohive.io/wp-content/uploads/2018/11/sfv-e1541512176414-570x321.png"
+            alt="Dance img"
+          />
+        </div>
+      </div>
+    </div>
+    <script>
+      function updateImg() {
+        var image = document.getElementById("main-img");
+        var file = document.getElementById("myfile").files[0];
+        var reader = new FileReader();
+        var y = "";
+        reader.addEventListener(
+          "load",
+          function () {
+            image.src = reader.result;
+          },
+          false
+        );
+        if (file) {
+          reader.readAsDataURL(file);
+        } else {
+          y = "choose some picture to display";
+          alert(y);
+          image.src = "";
+        }
+      }
+    </script>
+  </body>
+</html>
