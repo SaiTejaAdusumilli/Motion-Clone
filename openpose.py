@@ -3,7 +3,7 @@
 import cv2 as cv
 import numpy as np
 import argparse
-
+import os
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', help='Path to image or video. Skip to capture frames from camera')
 parser.add_argument('--thr', default=0.2, type=float, help='Threshold value for pose parts heat map')
@@ -11,6 +11,10 @@ parser.add_argument('--width', default=368, type=int, help='Resize input to spec
 parser.add_argument('--height', default=368, type=int, help='Resize input to specific height.')
 
 args = parser.parse_args()
+if not os.path.exists(os.path.join('./', 'original')):
+    os.makedirs(os.path.join('./', 'original'))
+if not os.path.exists(os.path.join('./', 'landmarks')):
+    os.makedirs(os.path.join('./', 'landmarks'))
 
 BODY_PARTS = { "Nose": 0, "Neck": 1, "RShoulder": 2, "RElbow": 3, "RWrist": 4,
                "LShoulder": 5, "LElbow": 6, "LWrist": 7, "RHip": 8, "RKnee": 9,
@@ -29,11 +33,11 @@ inHeight = args.height
 net = cv.dnn.readNetFromTensorflow("graph_opt.pb")
 
 #cap = cv.VideoCapture(args.input if args.input else 0)
-cap = cv.VideoCapture('11.mp4')
+cap = cv.VideoCapture('bruno.mp4')
 #cap.set(cv.CAP_PROP_FPS, 40)
 fps = int(cap.get(5))
 print("fps:", fps)
-
+c=0
 while cv.waitKey(1) < 0:
     hasFrame, frame = cap.read()
     hasFrame1, frame1 = cap.read()
@@ -87,7 +91,12 @@ while cv.waitKey(1) < 0:
     t, _ = net.getPerfProfile()
     freq = cv.getTickFrequency() / 1000
     cv.putText(frame, '%.2fms' % (t / freq), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
-    #img3=cv.subtract(frame,frame1)
+    img3=cv.subtract(frame,frame1)
     img3=cv.absdiff(frame,frame1)
     img3 = (255-img3)
+    #cv.imshow('OpenPose using OpenCV', frame)
     cv.imshow('OpenPose using OpenCV', img3)
+    c=c+1
+    cv.imwrite("original/{}.png".format(c), frame1)
+    cv.imwrite("landmarks/{}.png".format(c), img3)
+    print(points)    
